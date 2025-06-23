@@ -16,7 +16,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2 
+        uses: actions/checkout@v2
+
       - name: Update Dockerfile
         run: |
           # Extract the current version from the Dockerfile
@@ -56,6 +57,7 @@ jobs:
           # Show diff
           echo "Diff after update:"
           git diff docker/Dockerfile.release || true
+
         name: Commit and push changes
         run: |
           git config --global user.name "github-actions"
