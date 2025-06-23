@@ -50,9 +50,7 @@ jobs:
           
           # Construct the new version
           NEW_VERSION="${YEAR}.${PREV_MONTH}"
-          
-          # OLD_VERSION=${{ steps.get_version.outputs.old_version }}
-          # NEW_VERSION=${{ steps.get_version.outputs.new_version }}
+
           sed -i "s/$FILE_VERSION/$NEW_VERSION/g" docker/Dockerfile.release
 
           # Show diff
@@ -70,6 +68,9 @@ jobs:
             exit 0
           fi
 
+          # Extract the current version from the Dockerfile
+          UPDATED_VERSION=$(grep -oP 'ARG PYTORCH_IMG=\K\d{2}\.\d{2}' docker/Dockerfile.release)
+
           git add docker/Dockerfile.release
-          git commit -m "Update pytorch image in Dockerfile.release to version $NEW_VERSION"
+          git commit -m "Update pytorch image in Dockerfile.release to version $UPDATED_VERSION"
           git push origin HEAD:main
