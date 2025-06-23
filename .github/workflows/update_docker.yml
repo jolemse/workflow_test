@@ -21,14 +21,16 @@ jobs:
         run: |
           # Extract the current version from the Dockerfile
           FILE_VERSION=$(grep -oP 'ARG PYTORCH_IMG=\K\d{2}\.\d{2}' docker/Dockerfile.release)
-
+          echo "Current file version: $FILE_VERSION"
+          
           # Construct the date for the new version
           DATE=$(date '+%y.%m')
-
+          echo "Current date: $DATE"
+          
           # Separate new 
           YEAR=$(echo $DATE | cut -d'.' -f1)
           MONTH=$(echo $DATE | cut -d'.' -f2)
-
+          
           ## --- Handling of special cases ---
           # Move to the previous year
           if [ "$MONTH" == "01" ]; then
@@ -44,11 +46,15 @@ jobs:
           # Ensure the previous month is 2 digits
           PREV_MONTH=$(printf "%02d" $PREV_MONTH)
           fi
-
+          
           # Construct the new version
           NEW_VERSION="${YEAR}.${PREV_MONTH}"
-
+          echo "Date for : $NEW_VERSION"
+          ls
+          cd docker
+          ls
+          
           # OLD_VERSION=${{ steps.get_version.outputs.old_version }}
           # NEW_VERSION=${{ steps.get_version.outputs.new_version }}
-          sed -i.bak "s/$FILE_VERSION/$NEW_VERSION/g" docker/Dockerfile.release
+          sed -i.bak "s/$FILE_VERSION/$NEW_VERSION/g" Dockerfile.release
           touch test_file
