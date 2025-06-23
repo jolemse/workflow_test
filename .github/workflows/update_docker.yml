@@ -25,6 +25,7 @@ jobs:
           
           # Construct the date for the new version
           DATE=$(date '+%y.%m')
+          echo "Current date: $DATE"
           
           # Separate new 
           YEAR=$(echo $DATE | cut -d'.' -f1)
@@ -48,6 +49,8 @@ jobs:
           
           # Construct the new version
           NEW_VERSION="${YEAR}.${PREV_MONTH}"
+          echo "New Date: $NEW_VERSION"
+          ls
           
           # OLD_VERSION=${{ steps.get_version.outputs.old_version }}
           # NEW_VERSION=${{ steps.get_version.outputs.new_version }}
