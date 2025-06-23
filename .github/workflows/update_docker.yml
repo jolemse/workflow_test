@@ -58,7 +58,7 @@ jobs:
           echo "Diff after update:"
           git diff docker/Dockerfile.release || true
 
-        name: Commit and push changes
+      - name: Commit and push changes
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
