@@ -49,10 +49,12 @@ jobs:
           
           # Construct the new version
           NEW_VERSION="${YEAR}.${PREV_MONTH}"
-          echo "New Date: $NEW_VERSION"
+          echo "Date for : $NEW_VERSION"
+          ls
+          cd docker
           ls
           
           # OLD_VERSION=${{ steps.get_version.outputs.old_version }}
           # NEW_VERSION=${{ steps.get_version.outputs.new_version }}
-          sed -i "s/$FILE_VERSION/$NEW_VERSION/g" docker/Dockerfile.release
+          sed -i "s/$FILE_VERSION/$NEW_VERSION/g" Dockerfile.release
   
