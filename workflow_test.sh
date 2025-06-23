@@ -1,30 +1,32 @@
 # Extract the current version from the Dockerfile
-VERSION=$(grep -oP 'ARG PYTORCH_IMG=\K\d{2}\.\d{2}' docker/Dockerfile.release)
-echo "Current version is: $VERSION"
+FILE_VERSION=$(grep -oP 'ARG PYTORCH_IMG=\K\d{2}\.\d{2}' docker/Dockerfile.release)
 
-# Get the year and month
-YEAR=$(echo $VERSION | cut -d'.' -f1)
-MONTH=$(echo $VERSION | cut -d'.' -f2)
+# Construct the date for the new version
+DATE=$(date '+%y.%m')
 
-# Calculate the previous month
+# Separate new 
+YEAR=$(echo $DATE | cut -d'.' -f1)
+MONTH=$(echo $DATE | cut -d'.' -f2)
+
+## --- Handling of special cases ---
+# Move to the previous year
+if [ "$MONTH" == "01" ]; then
+PREV_MONTH="12"
+YEAR=$(($YEAR - 1))
+# 09 and 08 will be interpreted in Octal, so they have to be handled differently 
+elif [ "$MONTH" == "09" ]; then
+PREV_MONTH="08"
+elif [ "$MONTH" == "08" ]; then
+PREV_MONTH="07"
+else
 PREV_MONTH=$(($MONTH - 1))
-if [ $PREV_MONTH -eq 0 ]; then
-PREV_MONTH=12
-YEAR=$(($YEAR - 1))  # Move to previous year
-fi
-
-# Format the previous month in MM format
+# Ensure the previous month is 2 digits
 PREV_MONTH=$(printf "%02d" $PREV_MONTH)
+fi
 
 # Construct the new version
 NEW_VERSION="${YEAR}.${PREV_MONTH}"
-echo "Previous month version: $NEW_VERSION"
-
-echo "::set-output name=old_version::$VERSION"
-echo "::set-output name=new_version::$NEW_VERSION"
-
 
 # OLD_VERSION=${{ steps.get_version.outputs.old_version }}
 # NEW_VERSION=${{ steps.get_version.outputs.new_version }}
-sed -i "s/$VERSION/$NEW_VERSION/g" docker/Dockerfile.release
-echo "Updated Dockerfile with new version: $NEW_VERSION"
+sed -i "s/$FILE_VERSION/$NEW_VERSION/g" docker/Dockerfile.release
