@@ -8,7 +8,9 @@ on:
   release:
     types: [published]
 
-    
+# Allowing the workflow to write into the repository
+permissions:
+  contents: write
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
