@@ -48,11 +48,10 @@ jobs:
           
           # Construct the new version
           NEW_VERSION="${YEAR}.${PREV_MONTH}"
-          cd docker
           
           # OLD_VERSION=${{ steps.get_version.outputs.old_version }}
           # NEW_VERSION=${{ steps.get_version.outputs.new_version }}
-          sed -i "s/$FILE_VERSION/$NEW_VERSION/g" Dockerfile.release
+          sed -i "s/$FILE_VERSION/$NEW_VERSION/g" docker/Dockerfile.release
 
           # Show diff
           echo "Diff after update:"
