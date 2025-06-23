@@ -21,11 +21,9 @@ jobs:
         run: |
           # Extract the current version from the Dockerfile
           FILE_VERSION=$(grep -oP 'ARG PYTORCH_IMG=\K\d{2}\.\d{2}' docker/Dockerfile.release)
-          echo "Current file version: $FILE_VERSION"
           
           # Construct the date for the new version
           DATE=$(date '+%y.%m')
-          echo "Current date: $DATE"
           
           # Separate new 
           YEAR=$(echo $DATE | cut -d'.' -f1)
@@ -49,12 +47,26 @@ jobs:
           
           # Construct the new version
           NEW_VERSION="${YEAR}.${PREV_MONTH}"
-          echo "Date for : $NEW_VERSION"
-          ls
           cd docker
-          ls
           
           # OLD_VERSION=${{ steps.get_version.outputs.old_version }}
           # NEW_VERSION=${{ steps.get_version.outputs.new_version }}
-          sed -i.bak "s/$FILE_VERSION/$NEW_VERSION/g" Dockerfile.release
-          touch test_file
+          sed -i "s/$FILE_VERSION/$NEW_VERSION/g" Dockerfile.release
+
+          # Show diff
+          echo "Diff after update:"
+          git diff docker/Dockerfile.release || true
+        name: Commit and push changes
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+
+          # Check for changes
+          if git diff --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+
+          git add docker/Dockerfile.release
+          git commit -m "Update pytorch image in Dockerfile.release to version $NEW_VERSION"
+          git push origin HEAD:${GITHUB_REF}
