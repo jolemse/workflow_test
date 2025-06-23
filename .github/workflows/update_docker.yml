@@ -21,6 +21,7 @@ jobs:
         run: |
           # Extract the current version from the Dockerfile
           FILE_VERSION=$(grep -oP 'ARG PYTORCH_IMG=\K\d{2}\.\d{2}' docker/Dockerfile.release)
+          echo "Current file version: $FILE_VERSION"
           
           # Construct the date for the new version
           DATE=$(date '+%y.%m')
