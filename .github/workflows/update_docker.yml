@@ -52,6 +52,7 @@ jobs:
           NEW_VERSION="${YEAR}.${PREV_MONTH}"
 
           sed -i "s/$FILE_VERSION/$NEW_VERSION/g" docker/Dockerfile.release
+          sed -i "s/$FILE_VERSION/$NEW_VERSION/g" docker/Dockerfile.source
 
           # Show diff
           echo "Diff after update:"
