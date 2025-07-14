@@ -1,5 +1,5 @@
 # Extract the current version from the Dockerfile
-FILE_VERSION=$(grep -oP 'ARG PYTORCH_IMG=\K\d{2}\.\d{2}' docker/Dockerfile.release)
+FILE_VERSION_SOURCE=$(grep -oP 'ARG PYTORCH_IMG=\K\d{2}\.\d{2}' docker/Dockerfile.source)
 
 # Construct the date for the new version
 DATE=$(date '+%y.%m')
@@ -29,4 +29,4 @@ NEW_VERSION="${YEAR}.${PREV_MONTH}"
 
 # OLD_VERSION=${{ steps.get_version.outputs.old_version }}
 # NEW_VERSION=${{ steps.get_version.outputs.new_version }}
-sed -i "s/$FILE_VERSION/$NEW_VERSION/g" docker/Dockerfile.release
+sed -i "s/$FILE_VERSION_SOURCE/$NEW_VERSION/g" docker/Dockerfile.source
