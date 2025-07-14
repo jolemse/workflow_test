@@ -4,7 +4,7 @@
 # Check out the release notes:  https://docs.nvidia.com/deeplearning/frameworks/pytorch-release-notes/rel-25-02.html
 ####################################################################################################
 
-ARG PYTORCH_IMG=25.05-py3
+ARG PYTORCH_IMG=25.06-py3
 ARG HEAT_VERSION=1.5.1
 
 FROM nvcr.io/nvidia/pytorch:${PYTORCH_IMG} AS base
